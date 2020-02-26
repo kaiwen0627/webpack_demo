@@ -227,7 +227,7 @@ module.exports = {
         // 匹配图片文件
         // 默认处理不了html里面的图片
         test: /\.(jpg|png|gif)$/,
-        // 使用那些loader处理,需要下载两个包 url-loader file-loader ，file-loader为url-loader的依赖，不需要手动下载
+        // 使用那些loader处理,需要下载两个包 url-loader file-loader
         // 使用单个loader可以直接写，不需要use ： []
         loader: 'url-loader',
         options: {
@@ -264,4 +264,18 @@ module.exports = {
   // mode:'production'   /* 生产模式 */
 };
 
+```
+
+## 5.打包其他资源
+- 打包其他资源均用 file-loader来处理
+```js
+  {
+        // 匹配其他文件。匹配资源可以使用test也可以使用 exclude 排除某些文件，这两个可以同时存在
+        // test: /\.(ttf|mp4|json)$/,
+        exclude：/\.(css|js|html|png|jpg|gif|less)$/,
+        // 使用单个loader可以直接写，不需要use ： []
+        loader: 'file-loader',
+        // [hash:10] 名称为hash前十位 [ext]为文件扩展名
+        name: '[hash:10].[ext]'
+      }
 ```
