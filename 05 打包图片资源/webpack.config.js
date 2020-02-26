@@ -5,7 +5,7 @@ webpack.config.js webpack 的配置文件
  */
 
 const { resolve } = require('path');
-const HtmlWebpackPlugin= require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   //  入口
   entry: './src/index.js',
@@ -48,6 +48,32 @@ module.exports = {
           // 需要下载less 和 less-loader
           'less-loader'
         ]
+      },
+      {
+        // 匹配图片文件
+        // 默认处理不了html里面的图片
+        test: /\.(jpg|png|gif)$/,
+        // 使用那些loader处理,需要下载两个包 url-loader file-loader
+        // 使用单个loader可以直接写，不需要use ： []
+        loader: 'url-loader',
+        options: {
+          // 图片小于20Kb，就会使用base64处理
+          // 优点：减少请求数量（减小服务器压力）
+          // 缺点：图片体积会更大（文件请求速度更慢）
+          limit: 20 * 1024,
+          // 问题：因为url-loader默认使用es6模块化解析，而html-loader引入的图片使用commonjs，解析时出现问题： <img src="[object Module]" alt="">
+          // 解决：关闭url-loader的es6模块化，使用commonjs
+          esModule: false,
+          // [hash:10] 名称为hash前十位 [ext]为文件扩展名
+          name: '[hash:10].[ext]'
+        }
+      },
+      {
+        // 匹配图片文件
+        // url-loader默认处理不了html里面的图片,需要使用html-loader
+        test: /\.(html)$/,
+        // 使用单个loader可以直接写，不需要use ： []
+        loader: 'html-loader'
       }
     ]
   },
