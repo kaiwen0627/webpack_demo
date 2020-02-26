@@ -637,3 +637,90 @@ package.json
     "extends":"airbnb-base"
   },
 ```
+
+## 12.js兼容性处理
+
+```js
+/*
+开发环境配置
+webpack.config.js webpack 的配置文件
+作用：指示webpack干那些活
+所有构件的工具都是基于nodejs平台运行，模块化默认采用commonjs
+ */
+
+//  设置node运行的环境变量
+process.env.NODE_ENV = 'development';
+
+const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const miniCssExtractPlugin = require('mini-css-extract-plugin');
+
+// 压缩css插件 ：   optimize-css-assets-webpack-plugin
+
+const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+
+module.exports = {
+  //  入口
+  entry: './src/js/index.js',
+  // 输出
+  output: {
+    // 输出文件名
+    filename: 'js/built.js',
+    // 输出的路径
+    // __dirname nodejs的变量。代表当前文件的目录的决对路径
+    path: resolve(__dirname, 'build')
+  },
+  // loader的配置
+  // 不同的文件需要配置不同的loader处理
+  module: {
+    rules: [
+         {
+        // js 兼容性处理 babel-loader @babel/preset-env @babel/core
+        // 方案1，基本JS兼容处理 --》》 @babel/preset-env
+        // 问题：只能转化基本的语法
+        // 方案2.全部js处理（promise...） 下载 @babel/polyfill ，只需要在全局js引入使用即可。不需要配置webpack
+        //  问题：引入了所有兼容处理的代码。增加了代码体积
+        // 方案3.需要按需加载，需要的兼容才做，这里使用 core-js 来按需加载 ， 如下代码：
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                // 按需加载
+                useBuiltIns: 'usage',
+                // 指定core-js的版本
+                corejs: {
+                  version: 3
+                },
+                // 指定兼容到那个浏览器版本
+                targets: {
+                  chrome: '60',
+                  firefox: '60',
+                  ie: '9'
+                }
+              }
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  plugins: [
+  ],
+  mode: 'development' /* 开发模式 */,
+  devServer: {
+    contentBase: resolve(__dirname, 'build'),
+    // 启动gzip压缩
+    compress: true,
+    // 端口号
+    port: 3000,
+    // 自动打开浏览器
+    open: true
+  }
+};
+
+```
