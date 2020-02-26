@@ -550,3 +550,90 @@ module.exports = {
 };
 
 ```
+
+## 10.压缩css
+
+- 需要 optimize-css-assets-webpack-plugin 插件,引入使用即可
+
+```js
+/*
+开发环境配置
+webpack.config.js webpack 的配置文件
+作用：指示webpack干那些活
+所有构件的工具都是基于nodejs平台运行，模块化默认采用commonjs
+ */
+// 压缩css插件 ：   optimize-css-assets-webpack-plugin
+const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+module.exports = {
+  plugins: [
+    new optimizeCssAssetsWebpackPlugin()
+  ],
+  mode: 'development' /* 开发模式 */,
+};
+
+```
+
+## 11. 代码检查
+- 代码检查，一般只是用户检查js文件，不包括第三方代码，需要借助 eslint eslint-loader
+- 示例规范： airbnb-base 规范
+
+```js
+/*
+开发环境配置
+webpack.config.js webpack 的配置文件
+作用：指示webpack干那些活
+所有构件的工具都是基于nodejs平台运行，模块化默认采用commonjs
+ */
+
+//  设置node运行的环境变量
+process.env.NODE_ENV = 'development';
+
+const { resolve } = require('path');
+
+module.exports = {
+  //  入口
+  entry: './src/js/index.js',
+  // 输出
+  output: {
+    // 输出文件名
+    filename: 'js/built.js',
+    // 输出的路径
+    // __dirname nodejs的变量。代表当前文件的目录的决对路径
+    path: resolve(__dirname, 'build')
+  },
+  // loader的配置
+  // 不同的文件需要配置不同的loader处理
+  module: {
+    rules: [
+      {
+        // 语法检查： eslint-loader eslint
+        // 示例规范： eslint-plugin-import eslint-config-airbnb-base
+        // 注意： 只检查自己写的代码，不检查第三方代码
+        test: /\.js$/,
+        // 排除第三方代码
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        options: {
+          // 自动修复
+          fix: true
+        }
+      }
+    ]
+  },
+  plugins: [
+  ],
+  mode: 'development',
+  devServer: {
+  }
+};
+
+
+```
+
+package.json
+
+```json
+  "eslintConfig": {
+    "extends":"airbnb-base"
+  },
+```
