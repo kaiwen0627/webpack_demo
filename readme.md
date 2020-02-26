@@ -724,3 +724,24 @@ module.exports = {
 };
 
 ```
+
+
+## 压缩js和html
+```js
+// 修改mode为生产环境，会自动压缩js文件
+mode:'production'
+
+// 压缩html
+new HtmlWebpackPlugin({
+  // 复制template文件并自动引入打包输出的所有资源
+  template: './src/index.html',
+  // 压缩html
+  minify: {
+    // 删除空格
+    collapseWhitespace: true,
+    // 移除注释
+    removeComments: true
+  }
+})
+
+```
