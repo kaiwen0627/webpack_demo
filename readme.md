@@ -1016,3 +1016,55 @@ hidden-source-map    只是隐藏源代码，会提示构建后代码的错误�
 
 */
 ```
+
+## 17.oneOf
+
+- oneOf ,提高打包的速度，优化匹配loader的规则
+
+```js
+  module: {
+    rules: [
+      {
+        // 语法检查： eslint-loader eslint
+        // 示例规范： eslint-plugin-import eslint-config-airbnb-base
+        /*
+           package.json:
+          "eslintConfig": {
+            "extends": "airbnb-base"
+          },
+        */
+        // 注意： 只检查自己写的代码，不检查第三方代码
+        test: /\.js$/,
+        // 排除第三方代码
+        exclude: /node_modules/,
+        loader: 'eslint-loader',
+        // 相同文件执行不同loader时优先执行此loader
+        enforce: 'pre',
+        options: {
+          // 自动修复
+          fix: true
+        }
+      },
+      {
+        //以下loader只会匹配一个
+        // 注意：不能有两个配置处理同一类型的文件，所以把eslint提取出去了
+        oneOf: [
+          // 详细的loader配置
+          {
+            // 匹配那些文件
+            test: /\.css$/,
+            // 使用那些loader处理
+            use: [
+              ...commonCssLoader
+            ]
+          },
+          {
+            test: /\.less$/,
+            use: [
+              ...commonCssLoader,
+              'less-loader'
+            ]
+          },
+          ...
+
+```
