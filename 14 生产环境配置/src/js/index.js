@@ -1,8 +1,8 @@
-import '../styles/index.css'
-import '../styles/index2.css'
-import '../styles/index3.less'
+import '../styles/index.css';
+import '../styles/index2.css';
+import '../styles/index3.less';
 
-let a = 1;
+const a = 1;
 console.log(a);
 
 const promise = new Promise((resolve) => {

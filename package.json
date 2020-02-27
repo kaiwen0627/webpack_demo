@@ -34,9 +34,9 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   },
-  // "eslintConfig": {
-  //   "extends": "airbnb-base"
-  // },
+  "eslintConfig": {
+    "extends": "airbnb-base"
+  },
   "browseslist": {
     "development": [
       "last 1 chrome version",
