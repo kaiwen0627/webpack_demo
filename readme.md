@@ -945,3 +945,44 @@ module.exports = {
 };
 
 ```
+
+# 3.性能优化
+
+## 15.开发环境---HMR
+
+- 只需要配置 devServer 的  hot: true
+
+```js
+/*
+HMR： 热模块替换|热更新
+作用： 一个模块发生改变，只会重新打包这个模块，从而加快打包速度
+问题： 样式文件：可以使用HMR，因为style-loader内部实现了；
+
+      js文件：默认不能使用HMR，需要增加HMR支持代码，注意：只能处理非入口文件。
+
+      html文件：默认不能使用HMR。同时会导致一个问题：html文件不能热更新了(不需要做HMR)
+
+解决：html：修改 entry入口为数组，将html文件引入
+     js：
+    if(module.hot){
+      module.hot.accept('./src/xxx.js',function(){
+        // 方法会监听xxx.js文件的变化，一旦变化，其他文件默认不会重新打包
+        可以在此函数里面做一些事情，比如调用函数
+      })
+    }
+
+
+*/
+
+  devServer: {
+    contentBase: resolve(__dirname, 'build'),
+    // 启动gzip压缩
+    compress: true,
+    // 端口号
+    port: 3000,
+    // 自动打开浏览器
+    open: true,
+    // 打开HMR
+    hot: true
+  }
+```
