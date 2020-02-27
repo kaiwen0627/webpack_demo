@@ -1068,3 +1068,35 @@ hidden-source-map    只是隐藏源代码，会提示构建后代码的错误�
           ...
 
 ```
+
+## 18.缓存
+
+```js
+/*
+缓存：
+   1. bable缓存
+   // 开启babel缓存
+   // 第二次构建时，会读取之前的缓存，让第二次打包速度更快
+   cacheDirectory: true,
+
+   2.文件资源缓存
+    hash：每次webpack构建时都会生成一个新的唯一的hash值。
+    问题：因为js和css同时使用一个hash的值，如果重新打包，会导致所有的缓存失效
+
+    chunkhash：根据chunk生成的hash值，如果打包来源同一个chunk，那么hash值就一样
+    问题：js和css的hash值还是一样的，因为css是在js中引入的，属于一个chunk
+
+    contenthash:根据文件的生成内容生成的hash值，不同的文件hash值一定不同
+    --》让代码上线运行缓存更好使用
+*/
+
+
+  // 输出
+  output: {
+    // 输出文件名
+    filename: 'js/built.[contenthash:10].js',
+    // 输出的路径
+    // __dirname nodejs的变量。代表当前文件的目录的决对路径
+    path: resolve(__dirname, 'build')
+  },
+```
