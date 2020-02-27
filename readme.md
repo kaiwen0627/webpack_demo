@@ -1100,3 +1100,75 @@ hidden-source-map    只是隐藏源代码，会提示构建后代码的错误�
     path: resolve(__dirname, 'build')
   },
 ```
+## 19.tree shaking
+
+```js
+/*
+
+tree shaking ：去除无用的代码
+前提： 1.必须使用ES6模块化 2.开启 production 环境模式    无需修改其他！
+
+在package.json中配置：
+  "sideEffects":false   所有的代码都没有副作用，（都可以进行tree shaking）
+  问题：可能会把css、@babel/polyfill 文件干掉
+
+  解决办法：例： "sideEffects":["*.css"]  意思：css不需要进行tree shaking
+*/
+```
+
+## 20.生产环境优化 代码分割和按需加载
+
+- 1. 修改入口【后续可区分单页面程序（SPA）或者多页面程序(MPA)】
+
+```js
+  //  单入口
+  // entry: './src/js/index.js',
+  // 多入口，生成多个打包文件
+  entry: {
+    main: './src/js/index.js',
+    test: './src/js/test.js'
+  },
+```
+
+- 2. optimization方式
+
+```js
+module.exports = {
+  //  单入口
+  entry: './src/js/index.js',
+  // 输出
+  output: {
+    // 输出文件名
+    filename: 'js/[name]_built.[contenthash:10].js',
+    // 输出的路径
+    // __dirname nodejs的变量。代表当前文件的目录的决对路径
+    path: resolve(__dirname, 'build')
+  },
+  // 可以将node_modules里的代码单独打包为一个chunk输出
+  // 自动分析多入口chunk中，有没有公共的依赖文件。如果有，会打包为一个单独的chunk。不会多次打包
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
+  ...
+```
+
+- 3. js代码方法
+
+  ```js
+  /*
+  通过js代码。让某个文件被单独打包为一个chunk
+  import 为 ES10语法
+  webpackChunkName:'test'  给打包的chunk命名
+  */
+
+import (/* webpackChunkName:'test' */'./test')
+  .then(({ add }) => {
+    console.log(add(1, 2, 3));
+
+  }).catch(() => {
+    console.log('文件加载是失败。。。');
+
+  })
+  ```
