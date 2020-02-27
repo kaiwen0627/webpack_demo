@@ -986,3 +986,33 @@ HMR： 热模块替换|热更新
     hot: true
   }
 ```
+
+## 16.source-map
+
+```js
+/*
+source-map ：一种提示源代码到构建后代码的映射技术（如果侯建后代码出错，可以映射追踪源代码的错误）
+
+可选参数： [inline-|hidden-|eval-][nosources-][cheap-[module-]]source-map
+
+source-map： 外部 【错误代码的准确信息 和 源代码的错误位置】
+
+inline-source-map : 内联 【只生成一个内联source-map】【map文件在原js文件内部，没有生成外部文件，构建更快】【错误代码的准确信息 和 源代码的错误位置】
+
+hidden-source-map 外部 【错误代码的准确信息 和 不能追踪源代码的错误位置】
+
+eval-source-map  ：内联 【每一个文件生成一个对应内联source-map，都是在eval中】 【错误代码的准确信息 和 源代码的错误位置】
+
+nosources-source-map： 外部 【错误代码的准确信息 和 没有任何源代码的错误信息】
+
+开发环境：速度快、调试友好
+速度快（eval>inline>cheap>...）
+调试友好 : source-map   cheap-module-source-map  cheap-source-map
+
+生产环境：源代码要不要隐藏？调试友好问题？
+内联会让代码体积变大，所以生产环境不用
+nosources-source-map 全部隐藏
+hidden-source-map    只是隐藏源代码，会提示构建后代码的错误信息
+
+*/
+```
