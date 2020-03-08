@@ -1,27 +1,29 @@
-# 1.webpack简介
+# 1.webpack 简介
 
-## 1.webpack五个核心概念
+## 1.webpack 五个核心概念
 
 - Entry
-  入口（entry）指示webpack以哪个文件作为起点开始打包，分析构建内部依赖图。
+  入口（entry）指示 webpack 以哪个文件作为起点开始打包，分析构建内部依赖图。
 - Output
-  输出（output）指示webpack打包后的资源 bundles输出到哪里去，以及如何命名。
+  输出（output）指示 webpack 打包后的资源 bundles 输出到哪里去，以及如何命名。
 - Loader
-  Loader让webpack能够去处理那些非JavaScript文件（wenpack自身只能理解JavaScript）---扮演翻译官
+  Loader 让 webpack 能够去处理那些非 JavaScript 文件（wenpack 自身只能理解 JavaScript）---扮演翻译官
 - Plugins
   插件（plugins）可以用于执行范围更广的任务。插件的范围包括：从打包优化和压缩，一直到重新定义环境中的变量等。
 - Mode
-  模式（mode）指示webpack使用相应的配置
+  模式（mode）指示 webpack 使用相应的配置
 
-  |    选项     |                                                                                                        描述                                                                                                        |              特点              |
-  | :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------: |
-  | development |                                                              会将process.env.NODE_ENV的值设为development，启用NamedChunksPlugin和NamedModulesPlugins                                                               | 能让代码在本地调试和运行的环境 |
-  | production  | 会将process.env.NODE_ENV的值设为production，启用FlagDependencyUsagePlugin、FlagIncludedChunksPlugin、ModuleConcatenationPlugin、NoEmitOnErrorsPlugin、OccurrenceOrderPlugin、SideEffectsFlagPlugin和UglifyJsPlugin |   能让代码优化上线运行的环境   |
+  |    选项     |                                                                                                           描述                                                                                                           |              特点              |
+  | :---------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------: |
+  | development |                                                              会将 process.env.NODE_ENV 的值设为 development，启用 NamedChunksPlugin 和 NamedModulesPlugins                                                               | 能让代码在本地调试和运行的环境 |
+  | production  | 会将 process.env.NODE_ENV 的值设为 production，启用 FlagDependencyUsagePlugin、FlagIncludedChunksPlugin、ModuleConcatenationPlugin、NoEmitOnErrorsPlugin、OccurrenceOrderPlugin、SideEffectsFlagPlugin 和 UglifyJsPlugin |   能让代码优化上线运行的环境   |
 
-## 2.webpack初体验
+## 2.webpack 初体验
 
 #### 2.1 安装 webpack webpack-cli
+
 #### 2.2 打包
+
 ```bash
 // 1.运行指令：
 // 开发环境： webpack ./src/index.js -o ./build/built.js --mode=development
@@ -38,10 +40,10 @@
     3. 生产环境比开发环境多了一个压缩代码
     ***
 
-
 ## 3.打包样式文件
 
-#### 3.1 webpack配置
+#### 3.1 webpack 配置
+
 ```js
 /*
 webpack.config.js webpack 的配置文件
@@ -75,7 +77,7 @@ module.exports = {
           // 创建style标签，将js中的样式资源插入进行，添加在head中生效
           'style-loader',
           // 将css文件变成commonjs模块加载在js中，里面的内容是样式字符串
-          'css-loader',
+          'css-loader'
         ]
       },
       {
@@ -98,18 +100,18 @@ module.exports = {
   plugins: [
     // 详细的plugin配置
   ],
-  mode:'development'   /* 开发模式 */
+  mode: 'development' /* 开发模式 */
   // mode:'production'   /* 生产模式 */
 };
-
 ```
 
-## 4. 打包html
+## 4. 打包 html
+
 > 主要是需要 html-webpack-plugin 插件
 
 ```js
 const { resolve } = require('path');
-const HtmlWebpackPlugin= require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   //  入口
   entry: './src/index.js',
@@ -170,7 +172,9 @@ module.exports = {
 ```
 
 ## 5.打包图片资源
-- 打包图片资源，分为html里面的img标签和样式文件中的背景图，需要使用不同的loader相应处理。
+
+- 打包图片资源，分为 html 里面的 img 标签和样式文件中的背景图，需要使用不同的 loader 相应处理。
+
 ```js
 /*
 webpack.config.js webpack 的配置文件
@@ -263,11 +267,12 @@ module.exports = {
   mode: 'development' /* 开发模式 */
   // mode:'production'   /* 生产模式 */
 };
-
 ```
 
 ## 6.打包其他资源
-- 打包其他资源均用 file-loader来处理
+
+- 打包其他资源均用 file-loader 来处理
+
 ```js
   {
         // 匹配其他文件。匹配资源可以使用test也可以使用 exclude 排除某些文件，这两个可以同时存在
@@ -301,13 +306,14 @@ module.exports = {
 
 # 2. 生产环境配置优化
 
-## 8. 提取css文件为单文件
+## 8. 提取 css 文件为单文件
+
 - 需要 mini-css-extract-plugin 插件
 - 主要修改两个地方：
-   1. 引入并使用插件
-   2. 代替 style-loader ， less和css都需要来处理
-```js
+  1.  引入并使用插件
+  2.  代替 style-loader ， less 和 css 都需要来处理
 
+```js
 /*
 开发环境配置
 webpack.config.js webpack 的配置文件
@@ -378,7 +384,7 @@ module.exports = {
     // 功能：提取css为单文件
     new miniCssExtractPlugin({
       // 输出的文件名及路径
-      filename:'css/bulid.css'
+      filename: 'css/bulid.css'
     })
   ],
   mode: 'development' /* 开发模式 */,
@@ -396,12 +402,11 @@ module.exports = {
     open: true
   }
 };
-
 ```
 
-## 9.css文件的兼容性处理
+## 9.css 文件的兼容性处理
 
--  css兼容性处理，需要 postcss处理，安装 postcss-preset-env 和 postcss-loader 帮 postcss 找到 package.json 中 browserlist 里面的配置，通过配置加载指定的css兼容的样式,默认找生产环境的配置
+- css 兼容性处理，需要 postcss 处理，安装 postcss-preset-env 和 postcss-loader 帮 postcss 找到 package.json 中 browserlist 里面的配置，通过配置加载指定的 css 兼容的样式,默认找生产环境的配置
 
 ```js
 /*
@@ -551,7 +556,7 @@ module.exports = {
 
 ```
 
-## 10.压缩css
+## 10.压缩 css
 
 - 需要 optimize-css-assets-webpack-plugin 插件,引入使用即可
 
@@ -563,18 +568,16 @@ webpack.config.js webpack 的配置文件
 所有构件的工具都是基于nodejs平台运行，模块化默认采用commonjs
  */
 // 压缩css插件 ：   optimize-css-assets-webpack-plugin
-const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin')
+const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
-  plugins: [
-    new optimizeCssAssetsWebpackPlugin()
-  ],
-  mode: 'development' /* 开发模式 */,
+  plugins: [new optimizeCssAssetsWebpackPlugin()],
+  mode: 'development' /* 开发模式 */
 };
-
 ```
 
 ## 11. 代码检查
-- 代码检查，一般只是用户检查js文件，不包括第三方代码，需要借助 eslint eslint-loader
+
+- 代码检查，一般只是用户检查 js 文件，不包括第三方代码，需要借助 eslint eslint-loader
 - 示例规范： airbnb-base 规范
 
 ```js
@@ -620,14 +623,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-  ],
+  plugins: [],
   mode: 'development',
-  devServer: {
-  }
+  devServer: {}
 };
-
-
 ```
 
 package.json
@@ -638,7 +637,7 @@ package.json
   },
 ```
 
-## 12.js兼容性处理
+## 12.js 兼容性处理
 
 ```js
 /*
@@ -675,7 +674,7 @@ module.exports = {
   // 不同的文件需要配置不同的loader处理
   module: {
     rules: [
-         {
+      {
         // js 兼容性处理 babel-loader @babel/preset-env @babel/core
         // 方案1，基本JS兼容处理 --》》 @babel/preset-env
         // 问题：只能转化基本的语法
@@ -709,8 +708,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-  ],
+  plugins: [],
   mode: 'development' /* 开发模式 */,
   devServer: {
     contentBase: resolve(__dirname, 'build'),
@@ -722,14 +720,13 @@ module.exports = {
     open: true
   }
 };
-
 ```
 
+## 13.压缩 js 和 html
 
-## 13.压缩js和html
 ```js
 // 修改mode为生产环境，会自动压缩js文件
-mode:'production'
+mode: 'production';
 
 // 压缩html
 new HtmlWebpackPlugin({
@@ -742,11 +739,11 @@ new HtmlWebpackPlugin({
     // 移除注释
     removeComments: true
   }
-})
-
+});
 ```
 
 ## 14.生产环境基本配置
+
 ```js
 /*
 生产环境配置
@@ -779,7 +776,7 @@ const commonCssLoader = [
       plugins: () => [require('postcss-preset-env')()]
     }
   }
-]
+];
 
 module.exports = {
   //  入口
@@ -801,16 +798,11 @@ module.exports = {
         // 匹配那些文件
         test: /\.css$/,
         // 使用那些loader处理
-        use: [
-          ...commonCssLoader
-        ]
+        use: [...commonCssLoader]
       },
       {
         test: /\.less$/,
-        use: [
-          ...commonCssLoader,
-          'less-loader'
-        ]
+        use: [...commonCssLoader, 'less-loader']
       },
       {
         // 匹配图片文件
@@ -866,7 +858,7 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'eslint-loader',
         // 相同文件执行不同loader时优先执行此loader
-        enforce:'pre',
+        enforce: 'pre',
         options: {
           // 自动修复
           fix: true
@@ -903,8 +895,7 @@ module.exports = {
             ]
           ]
         }
-      },
-
+      }
     ]
   },
   plugins: [
@@ -943,14 +934,13 @@ module.exports = {
     open: true
   }
 };
-
 ```
 
 # 3.性能优化
 
 ## 15.开发环境---HMR
 
-- 只需要配置 devServer 的  hot: true
+- 只需要配置 devServer 的 hot: true
 
 ```js
 /*
@@ -1019,7 +1009,7 @@ hidden-source-map    只是隐藏源代码，会提示构建后代码的错误�
 
 ## 17.oneOf
 
-- oneOf ,提高打包的速度，优化匹配loader的规则
+- oneOf ,提高打包的速度，优化匹配 loader 的规则
 
 ```js
   module: {
@@ -1100,6 +1090,7 @@ hidden-source-map    只是隐藏源代码，会提示构建后代码的错误�
     path: resolve(__dirname, 'build')
   },
 ```
+
 ## 19.tree shaking
 
 ```js
@@ -1130,7 +1121,7 @@ tree shaking ：去除无用的代码
   },
 ```
 
-- 2. optimization方式
+- 2. optimization 方式
 
 ```js
 module.exports = {
@@ -1154,7 +1145,7 @@ module.exports = {
   ...
 ```
 
-- 3. js代码方法
+- 3. js 代码方法
 
 ```js
 /*
@@ -1163,25 +1154,26 @@ import 为 ES10语法
 webpackChunkName:'test'  给打包的chunk命名
 */
 
-import (/* webpackChunkName:'test' */'./test')
+import(/* webpackChunkName:'test' */ './test')
   .then(({ add }) => {
     console.log(add(1, 2, 3));
-
-  }).catch(() => {
-    console.log('文件加载是失败。。。');
-
   })
-  ```
+  .catch(() => {
+    console.log('文件加载是失败。。。');
+  });
+```
 
 ## 21. 懒加载
 
 ```js
-  // 懒加载：文件需要时才加载
-  // 预加载prefetch：会在使用之前加载。等其他资源加载完毕，浏览器空闲了再偷偷在后台加载
-    import (/* webpackChunkName:'test' ,webpackPrefetch:true*/'./test').then(({ add }) => {
-      console.log('test被加载了。。。')
-    add(2, 3)
-    })
+// 懒加载：文件需要时才加载
+// 预加载prefetch：会在使用之前加载。等其他资源加载完毕，浏览器空闲了再偷偷在后台加载
+import(/* webpackChunkName:'test' ,webpackPrefetch:true*/ './test').then(
+  ({ add }) => {
+    console.log('test被加载了。。。');
+    add(2, 3);
+  }
+);
 ```
 
 ## 22. PWA
@@ -1191,32 +1183,35 @@ import (/* webpackChunkName:'test' */'./test')
 
 ```js
 // webpack 插件配置
-const workboxWebpackPlugin = require('workbox-webpack-plugin')
+const workboxWebpackPlugin = require('workbox-webpack-plugin');
 // 生成一个serviceworker配置文件。默认在打包的根目录
 new workboxWebpackPlugin.GenerateSW({
-  clientsClaim: true, /* 帮助serviceworker 快速启动 */
+  clientsClaim: true /* 帮助serviceworker 快速启动 */,
   skipWaiting: true /* 删除旧的serviceworker */
-})
+});
 ```
 
 ```js
 // 在 入口文件 注册serviceworker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').then(() => {
-      console.log('sw注册成功了');
-    }).catch(() => {
-      console.log('sw注册失败');
-    });
+    navigator.serviceWorker
+      .register('./service-worker.js')
+      .then(() => {
+        console.log('sw注册成功了');
+      })
+      .catch(() => {
+        console.log('sw注册失败');
+      });
   });
 } else {
   console.log('error');
 }
-
 ```
 
 ## 23. 多进程
-- 需要安装 thread-loader ，一般只是用在babel之后（必须在后面执行）
+
+- 需要安装 thread-loader ，一般只是用在 babel 之后（必须在后面执行）
 
 ```js
 {
@@ -1259,5 +1254,76 @@ if ('serviceWorker' in navigator) {
       ]
     }],
   }
-},
+}
+```
+
+## 24.externals
+
+```js
+  mode: 'production',  /* 生产模式 */
+  externals: {
+    // 拒绝jQuery被打包进来，通过CDN在html模板里面引入
+    jquery: 'jquery'
+  }
+```
+
+## 25.DLL
+
+- 新建文件 webpack.dll.js ,内容如下：只是演示 jquery，其他的也可以直接增加
+
+```js
+/*
+   使用DLL技术，对某些库（vue，jquery等）进行单独打包。。
+   运行的命令修改： webpack --config webpack.dll.js  , 修改运行的查找的配置文件
+*/
+const { resolve } = require('path');
+const webpack = require('webpack');
+module.exports = {
+  //  入口
+  entry: {
+    // 最终打包生产的[name]--》 jQuery
+    // ['jquery'] 需要打包的库名称jquery
+    jquery: ['jquery']
+  },
+  // 输出
+  output: {
+    // 输出文件名
+    filename: '[name].js',
+    // 输出的路径
+    // __dirname nodejs的变量。代表当前文件的目录的决对路径
+    path: resolve(__dirname, 'dll'),
+    library: '[name]_[hash]' // 打包后的库向外暴露出去的名字叫什么名字
+  },
+
+  plugins: [
+    // 打包生成manifest.json文件。--> 提供和jquery映射
+    new webpack.DllPlugin({
+      name: '[name]_[hash]', // 映射库的暴露的内容名称
+      path: resolve(__dirname, 'dll/manifest.json') // 输出的映射文件
+    })
+  ],
+  mode: 'production' /* 生产模式 */
+};
+```
+
+- webpack.config.js 修改
+
+```js
+const { resolve } = require('path');
+const webpack = require('webpack')
+const addAssetHtmlWebpackPlugin = require('add-asset-html-webpack-plugin')
+module.exports = {
+...
+  plugins: [
+    // 告诉webpack 那些库不参与打包，同时使用时的名称也需要修改为重新配置打包的
+    new webpack.DllReferencePlugin({
+      manifest:resolve(__dirname,'dll/manifest.json')
+    }),
+    // 将某个文件打包输出去，并在html里面引入该资源
+    new addAssetHtmlWebpackPlugin({
+      filepath: resolve(__dirname, 'dll/jquery.js')
+    })
+  ],
+  mode: 'production',  /* 生产模式 */
+}
 ```
