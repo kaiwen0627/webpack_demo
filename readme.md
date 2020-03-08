@@ -1214,3 +1214,50 @@ if ('serviceWorker' in navigator) {
 }
 
 ```
+
+## 23. 多进程
+- 需要安装 thread-loader ，一般只是用在babel之后（必须在后面执行）
+
+```js
+{
+
+  test: /\.js$/,
+  exclude: /node_modules/,
+  use: [
+    /*
+    开启多进程打包
+    进程启动需要时间，进程通信需要时间
+    只有工作消耗时间比较长的，才需要多进程打包
+    */
+  {
+    loader:'thread-loader',
+    options:{
+      workers:2 // 进程两个
+    }
+  },
+  {
+    loader: 'babel-loader',
+    options: {
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            // 按需加载
+            useBuiltIns: 'usage',
+            // 指定core-js的版本
+            corejs: {
+              version: 3
+            },
+            // 指定兼容到那个浏览器版本
+            targets: {
+              chrome: '60',
+              firefox: '60',
+              ie: '9'
+            }
+          }
+        ]
+      ]
+    }],
+  }
+},
+```
