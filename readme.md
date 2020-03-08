@@ -1156,12 +1156,12 @@ module.exports = {
 
 - 3. js代码方法
 
-  ```js
-  /*
-  通过js代码。让某个文件被单独打包为一个chunk
-  import 为 ES10语法
-  webpackChunkName:'test'  给打包的chunk命名
-  */
+```js
+/*
+通过js代码。让某个文件被单独打包为一个chunk
+import 为 ES10语法
+webpackChunkName:'test'  给打包的chunk命名
+*/
 
 import (/* webpackChunkName:'test' */'./test')
   .then(({ add }) => {
@@ -1172,3 +1172,45 @@ import (/* webpackChunkName:'test' */'./test')
 
   })
   ```
+
+## 21. 懒加载
+
+```js
+  // 懒加载：文件需要时才加载
+  // 预加载prefetch：会在使用之前加载。等其他资源加载完毕，浏览器空闲了再偷偷在后台加载
+    import (/* webpackChunkName:'test' ,webpackPrefetch:true*/'./test').then(({ add }) => {
+      console.log('test被加载了。。。')
+    add(2, 3)
+    })
+```
+
+## 22. PWA
+
+- PWA：渐进式网络开发应用程序
+- 插件：workbox-webpack-plugin
+
+```js
+// webpack 插件配置
+const workboxWebpackPlugin = require('workbox-webpack-plugin')
+// 生成一个serviceworker配置文件。默认在打包的根目录
+new workboxWebpackPlugin.GenerateSW({
+  clientsClaim: true, /* 帮助serviceworker 快速启动 */
+  skipWaiting: true /* 删除旧的serviceworker */
+})
+```
+
+```js
+// 在 入口文件 注册serviceworker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').then(() => {
+      console.log('sw注册成功了');
+    }).catch(() => {
+      console.log('sw注册失败');
+    });
+  });
+} else {
+  console.log('error');
+}
+
+```
