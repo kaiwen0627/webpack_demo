@@ -1327,3 +1327,223 @@ module.exports = {
   mode: 'production',  /* 生产模式 */
 }
 ```
+
+# 4. 详细配置介绍：
+
+## 26.entry
+
+```js
+const { resolve } = require('path');
+const htmlWebpackPlugin = require('html-webpack-plugin');
+
+/*
+ 1. string >>  entry: './src/index.js',
+ 打包形成一个chunk ，输出一个 bundle文件
+*/
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: '[name].js',
+    path: resolve(__dirname, 'build')
+  },
+  plugins: [new htmlWebpackPlugin()],
+  mode: 'development'
+};
+
+/*
+ 2. array >>  ['./src/index.js','./src/add.js']
+   多入口打包形成一个chunk ，输出一个 bundle文件
+   用途：在HMR功能中让html热更新生效
+*/
+module.exports = {
+  entry: ['./src/index.js', './src/add.js'],
+  output: {
+    filename: '[name].js',
+    path: resolve(__dirname, 'build')
+  },
+  plugins: [new htmlWebpackPlugin()],
+  mode: 'development'
+};
+
+/*
+ 3. object >>  { index: './src/index.js', add: './src/add.js' }
+   多入口打包形成多个chunk ，输出多个bundle文件
+   chunk名称就是key
+
+   特殊用法：
+   {
+    // index不引入add。也会被打包在index的chunk里面。
+     index: ['./src/index.js','./src/add.js'],
+    //  第一种情况
+     add: './src/add.js'
+  }
+*/
+module.exports = {
+  entry: { index: './src/index.js', add: './src/add.js' },
+  output: {
+    filename: '[name].js',
+    path: resolve(__dirname, 'build')
+  },
+  plugins: [new htmlWebpackPlugin()],
+  mode: 'development'
+};
+```
+
+## 27.output
+
+```js
+const { resolve } = require('path');
+const htmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    //文件名称（指定名称+目录）
+    filename: 'js/[name].js',
+    // 输出文件的目录（所有资源输出的公共目录）
+    path: resolve(__dirname, 'build'),
+    // 所有资源的引入的公共路径 --> 'imgs/a.jpg'==>> '/imgs/a.jpg'
+    // publicPath: '/',
+    // 非入口chunk的名称
+    chunkFilename: '[name]_chunk.js',
+    library: '[name]', // 整个库向外暴露的变量名
+    libraryTarget: 'window' //变量名添加到那个对象上 brower
+    // libraryTarget:'global' //变量名添加到那个对象上 node
+  },
+  plugins: [new htmlWebpackPlugin()],
+  mode: 'development'
+};
+```
+
+## 28.module
+
+```js
+const { resolve } = require('path');
+const htmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    //文件名称（指定名称+目录）
+    filename: 'js/[name].js',
+    // 输出文件的目录（所有资源输出的公共目录）
+    path: resolve(__dirname, 'build')
+  },
+  module: {
+    rules: [
+      // load 的配置
+      {
+        test: /\.css$/,
+        // 多个loader用use
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: '/.js$/',
+        // 排除第三方代码
+        exclude: /node_modules/,
+        // 只检查 src 目录下的代码
+        include: resolve(__dirname, 'src'),
+        // 单个直接用loader
+        loader: 'eslint-loader',
+        // 优先执行
+        enforce: 'pre'
+        /*   // 延后执行
+          enforce:'post' */
+      },
+      {
+        // 以下的loader只会生效一个
+        oneOf: []
+      }
+    ]
+  },
+  plugins: [new htmlWebpackPlugin()],
+  mode: 'development'
+};
+```
+
+## 30.resolve
+
+```js
+const { resolve } = require('path');
+const htmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    //文件名称（指定名称+目录）
+    filename: 'js/[name].js',
+    // 输出文件的目录（所有资源输出的公共目录）
+    path: resolve(__dirname, 'build')
+  },
+  // 解析模块的规则
+  resolve: {
+    // 配置路径别名
+    alias: {
+      '@': resolve(__dirname, 'src')
+    },
+    // 配置省略文件路径的后缀名
+    extensions: ['js', 'vue'],
+    // 告诉webpack解析模块去哪个目录
+    modules: ['node_modules']
+  },
+  plugins: [new htmlWebpackPlugin()],
+  mode: 'development'
+};
+```
+
+## 31.devServer
+
+```js
+/*
+webpack.config.js webpack 的配置文件
+作用：指示webpack干那些活
+所有构件的工具都是基于nodejs平台运行，模块化默认采用commonjs
+ */
+
+const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+module.exports = {
+  //  入口
+  entry: './src/index.js',
+   ...
+  devServer: {
+    // 运行代码的目录
+    contentBase: resolve(__dirname, 'build'),
+    // 监视文件变化，重新打包，reload
+    watchContentBase: true,
+    // 不监视第三方代码
+    watchOption: {
+      ignored: /node_modules/
+    },
+    // 启动gzip压缩
+    compress: true,
+    // 端口号
+    port: 3000,
+    // 自动打开浏览器
+    open: true,
+    // 域名
+    host: 'localhost',
+    // 开启HMR
+    hot: true,
+    // 不显示启动服务器的日志信息
+    clientLogLevel: 'none',
+    // 除了基本的信息外，不显示其他内容
+    quiet: true,
+    // 如果出现错误，不要全屏提示
+    overlay: false,
+    // 服务器代理 --》 解决开发环境跨域问题
+    proxy: {
+      // 一旦devserver 服务器接收到 /api/XXX 请求，就会转发请求到目标服务器 （target:'http://www.douban.com'）
+      '/api': {
+        target: 'http://www.douban.com',
+        // 路径重写，将  /api/XXX 请求  ====》》》  /XXX 请求
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+
+  }
+};
+
+```
